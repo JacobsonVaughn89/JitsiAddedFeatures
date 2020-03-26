@@ -9,7 +9,7 @@ import { translate } from '../../../base/i18n';
 import { connect } from '../../../base/redux';
 
 import SmileysPanel from './SmileysPanel';
-
+import Filter from 'bad-words';
 /**
  * The type of the React {@code Component} props of {@link ChatInput}.
  */
@@ -162,8 +162,13 @@ class ChatInput extends Component<Props, State> {
         if (event.keyCode === 13
             && event.shiftKey === false) {
             event.preventDefault();
+            
+            const filter = new Filter();
+            let trimmed = '';
 
-            const trimmed = this.state.message.trim();
+            this.state.message = filter.clean(this.state.message);
+
+            trimmed = this.state.message.trim();
 
             if (trimmed) {
                 this.props.onSend(trimmed);
